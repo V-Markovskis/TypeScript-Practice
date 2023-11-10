@@ -644,7 +644,7 @@ function arrayOfObjects(a: {a: number, b: number}[]) {
 }
 
 console.log(arrayOfObjects([{a:1,b:2},{a:5,b:4}]));
-console.log(arrayOfObjects(([{a:2,b:10},{a:5,b:4}]));
+console.log(arrayOfObjects([{a:2,b:10},{a:5,b:4}]));
 console.log(arrayOfObjects([{a:1,b:7},{a:2,b:1}]));
 console.log("============================");
 
@@ -660,12 +660,452 @@ function mergeArrays(a: any[], b: any[]) {
     //If it is, then the item is unique.
     //https://stackoverflow.com/questions/1584370/how-to-merge-two-arrays-in-javascript-and-de-duplicate-items
     let uniqArray = concatArray.filter((item, position) => concatArray.indexOf(item) === position);
-    let sortedArray = uniqArray.sort();
+    // when the sort method is called without the compare function,
+    // the array elements are sorted as strings
+    let sortedArray = uniqArray.sort((a, b) => a - b);
 
     return sortedArray;
 }
 
 console.log(mergeArrays([1, 2, 3], [3, 4, 5]));
 console.log(mergeArrays([-10, 22, 333, 42], [-11, 5, 22, 41, 42]));
+console.log("============================");
+
+
+//task40
+// Write a function that takes an array (a) and a number (b) as arguments
+// Sum up all array elements with a value greater than b
+// Return the sum
+function sumArrayElements(a: number[], b: number) {
+    // let sumElements = 0;
+    // for(let i = 0; i < a.length; i++) {
+    //     if(a[i] > b) {
+    //         sumElements += a[i];
+    //     }
+    // }
+
+    // return sumElements;
+
+    let filteredElements = a.filter((element) => element > b);
+    let resultSum = filteredElements.reduce((acc, element) => acc + element, 0);
+    return resultSum;
+}
+
+console.log(sumArrayElements([1, 2, 3, 4, 5, 6, 7], 2));
+console.log(sumArrayElements([-10, -11, -3, 1, -4], -3));
+console.log(sumArrayElements([78, 99, 100, 101, 401], 99));
+console.log("============================");
+
+
+//task41
+// Write a function that takes two numbers (min and max) as arguments
+// Return an array of numbers in the range min to max
+function arrayRange(min: number, max: number) {
+    // let array: number[] = []
+    // for(let i = min; i <= max; i++) {
+    //     array.push(i);
+    // }
+
+    // return array;
+
+    return Array.from({length: max - min + 1}, (_, index) => min + index);
+    // 1) array from object {length: max - min + 1}
+    // 2) {length: max - min + 1} means object with only one property, determines the length of the new array
+    // 3) (_, index) => min + index   arrow function that is used to display each of the new array.
+        // The _ here stands for and argument that don't use (because we only care about index)
+    // (_) unused argument, usage (currentValue)
+}
+
+console.log(arrayRange(2, 10));
+console.log(arrayRange(1, 3));
+console.log(arrayRange(-5, 5));
+console.log(arrayRange(2, 7));
+console.log("============================");
+
+
+
+//task42
+// Write a function that takes an array of strings as argument
+// Group those strings by their first letter
+// Return an object that contains properties with keys representing first letters
+// The values should be arrays of strings containing only the corresponding strings
+// For example, the array ['Alf', 'Alice', 'Ben'] should be transformed to
+// { a: ['Alf', 'Alice'], b: ['Ben']}
+function groupByFirstLetter(namesArr: string[]) {
+    // Create an object to store grouping results
+    const nameObj: Record<string, string[]> = {};
+
+    //Iterate over each row in the array
+    namesArr.forEach((item) => {
+        // Get the first letter of the string and convert it to lower case
+        const firstLetter: string = item[0].toLowerCase();
+    
+    // If the key with this letter is not in the object, create it and assign it to an empty array
+    if(!nameObj[firstLetter]) {
+        nameObj[firstLetter] = [];
+    }
+
+    // Add the current string to the corresponding array
+    nameObj[firstLetter].push(item);
+    });
+
+    // Return object with grouped strings
+    return nameObj;
+}
+
+console.log(groupByFirstLetter(['Alf', 'Alice', 'Ben']));
+console.log(groupByFirstLetter(['Ant', 'Bear', 'Bird']));
+console.log(groupByFirstLetter(['Berlin', 'Paris', 'Prague']));
+console.log("============================");
+
+
+//task43
+// Write a function that takes an array with arbitrary elements and a number as arguments
+// Return a new array, the first element should be either the given number itself
+// or zero if the number is smaller than 6
+// The other elements should be the elements of the original array
+// Try not to mutate the original array
+function addFirstElementArray(a: any[], b: number) {
+    let arrayCopy = a.slice(0);
+    if(b < 6) {
+        b = 0;
+    }
+    arrayCopy.unshift(b);
+    return arrayCopy;
+
+    //return [num < 6 ? 0 : num, ...arr];
+}
+
+console.log(addFirstElementArray([1,2,3], 6));
+console.log(addFirstElementArray(['a','b'], 2));
+console.log(addFirstElementArray([null,false], 11));
+console.log("============================");
+
+
+//task44
+// Write a function that takes an array (a) and a value (n) as arguments
+// Save every nth element in a new array
+// Return the new array
+function arrayCreation(a: number[], n: number) {
+    const filteredArray = a.filter((currentValue, currentIndex, arrayToBeFiltered) => {
+        return (currentIndex + 1 ) % n === 0;
+    })
+
+    return filteredArray;
+}
+
+console.log(arrayCreation([1,2,3,4,5,6,7,8,9,10],3));
+console.log(arrayCreation([10,9,8,7,6,5,4,3,2,1],5));
+console.log(arrayCreation([7,2,1,6,3,4,5,8,9,10],2));
+console.log("============================");
+
+
+//task45
+// Write a function that takes an object with two properties as argument
+// It should return the value of the property with key country
+function keyCountryValue(obj: { continent: string; country: string }) {
+    return obj.country;
+}
+
+console.log(keyCountryValue({  continent: 'Asia',  country: 'Japan'}));
+console.log(keyCountryValue({  country: 'Sweden',  continent: 'Europe'}));
+console.log("============================");
+
+
+//task46
+// Write a function that takes an object with two properties as argument
+// It should return the value of the property with key 'prop-2'
+// Tip: you might want to use the square brackets property accessor
+function objectPropert(obj: { [key: string]: any} ) {
+    return obj['prop-2'];
+}
+
+// [key: string] This is the part that tells TS that object properties can have arbitary string keys
+// (key) is a variable name that can be used to access object properties
+// (string) is a variable type
+
+console.log(objectPropert({  one: 1,  'prop-2': 2}));
+console.log(objectPropert({  'prop-2': 'two',  prop: 'test'}));
+console.log("============================");
+
+
+
+//task47
+// Write a function that takes an object with two properties and a string as arguments
+// It should return the value of the property with key equal to the value of the string
+function equalStringProperty(obj: { [key: string]: any }, word: string) {
+    return obj[word];
+}
+
+//if you used a dot, JavaScript would try to find the property named 'word', not the value of the word variable.
+
+console.log(equalStringProperty({  continent: 'Asia',  country: 'Japan'}, 'continent'));
+console.log(equalStringProperty({  country: 'Sweden',  continent: 'Europe'}, 'country'));
+console.log("============================");
+
+
+//task48
+// Write a function that takes an object (a) and a string (b) as argument
+// Return true if a has a property with key b
+// Return false otherwise
+function isPropertyExist(obj: { [key: string]: any }, b: string) {
+    return obj[b] ? true : false;
+
+    // return obj.hasOwnProperty(b);
+}
+
+
+console.log(isPropertyExist({a:1,b:2,c:3},'b'));
+console.log(isPropertyExist({x:'a',y:'b',z:'c'},'a'));
+console.log(isPropertyExist({x:'a',y:'b',z:'c'},'z'));
+console.log("============================");
+
+
+
+//task49
+// Write a function that a string (a) as argument
+// Create an object that has a property with key 'key' and a value of a
+// Return the object
+function createObject(a: string) {
+    return { key: a };
+}
+
+console.log(createObject('a'));
+console.log(createObject('z'));
+console.log(createObject('b'));
+console.log("============================");
+
+
+
+//task50
+// Write a function that takes two strings (a and b) as arguments
+// Create an object that has a property with key 'a' and a value of 'b'
+// Return the object
+function createObjectWithParams(a: string, b: string) {
+    return {
+        a: b
+    };
+}
+
+console.log(createObjectWithParams('a','b'));
+console.log(createObjectWithParams('z','x'));
+console.log(createObjectWithParams('b','w'));
+console.log("============================");
+
+
+// task51
+// Write a function that takes two arrays (a and b) as arguments
+// Create an object that has properties with keys 'a' and corresponding values 'b'
+// Return the object
+function objectsFromArrays(a: any[], b: any[]): { [key: string]: any } {
+    return a.reduce((result, key, index) => {
+        result[key] = b[index];
+        return result;
+    }, {});
+
+    //(result) at each iteration will start with an empty object {}
+    //(result) represents an object to which properties are added at each step
+    // (key) this is a variable that stores the current element of the array (a)
+    // b[index] at each iteration, index provides the current index of the element in array a,
+    // and we USE IT to get the corresponding element from array b
+}
+
+console.log(objectsFromArrays(['a','b','c'],[1,2,3]));
+console.log(objectsFromArrays(['w','x','y','z'],[10,9,5,2]));
+console.log(objectsFromArrays([1,'b'],['a',2]));
+console.log("============================");
+
+
+// task52
+// Write a function that takes an object (a) as argument
+// Return an array with all object keys
+function arrayFromObjectKeys(a: { [key: string]: any }) : string[] {
+    return Object.keys(a).reduce((result, key) => {
+        result.push(key);
+        return result;
+    }, [])
+}
+
+console.log(arrayFromObjectKeys({a:1,b:2,c:3}));
+console.log(arrayFromObjectKeys({j:9,i:2,x:3,z:4}));
+console.log(arrayFromObjectKeys({w:15,x:22,y:13}));
+console.log("============================");
+
+
+// task53
+// Write a function that takes an object (a) as argument
+// Return the sum of all object values
+function sumValuesFromObject(a: { [key:string]: any }): number {
+    return Object.values(a).reduce((result, value) => {
+        result += value;
+        return result;
+    }, 0);
+}
+
+console.log(sumValuesFromObject({a:1,b:2,c:3}));
+console.log(sumValuesFromObject({j:9,i:2,x:3,z:4}));
+console.log(sumValuesFromObject({w:15,x:22,y:13}));
+console.log("============================")
+
+
+//task54
+// Write a function that takes an object as argument
+// It should return an object with all original object properties
+// except for the property with key 'b'
+function deletePropertyFromArray(obj: { [key: string]: any }) : { [key: string]: any } {
+    const {b, ...rest} = obj;
+
+    return rest;    
+}
+
+console.log(deletePropertyFromArray({ a: 1, b: 7, c: 3 }));
+console.log(deletePropertyFromArray({ b: 0, a: 7, d: 8 }));
+console.log(deletePropertyFromArray({ e: 6, f: 4, b: 5, a: 3 }));
+console.log("============================")
+
+
+//task55
+// Write a function that takes two objects as arguments
+// Unfortunately, the property 'b' in the second object has the wrong key
+// should be named 'd' instead
+// Merge both objects and correct the wrong property name
+// Return the resulting object
+// It should have the properties 'a', 'b', 'c', 'd', and 'e'
+function twoObjectsOperation(obj1: { [key: string]: any }, obj2: { [key: string]:any }) : { [key: string]: any} {
+    if(obj2.hasOwnProperty('b')) {
+        obj2['d'] = obj2['b'];
+        delete obj2['b'];
+    }
+
+    const obj3 = {...obj1, ...obj2};
+    return obj3;
+}
+
+console.log(twoObjectsOperation({ a: 1, b: 2 }, { c: 3, b: 4, e: 5 }));
+console.log(twoObjectsOperation({ a: 5, b: 4 }, { c: 3, b: 1, e: 2 }));
+console.log("============================")
+
+
+//task56
+// Write a function that takes an object (a) and a number (b) as arguments
+// Multiply all values of 'a' by 'b'
+// Return the resulting object
+function multiplyValues(obj: { [key: string]: any }, num: number) : { [key: string]: any } {
+    return Object.keys(obj).reduce((result, key) => {
+        result[key] = obj[key] * num;
+        return result;
+    }, {} as { [key: string]: any });
+}
+
+console.log(multiplyValues({a:1,b:2,c:3},3));
+console.log(multiplyValues({j:9,i:2,x:3,z:4},10));
+console.log(multiplyValues({w:15,x:22,y:13},6));
+console.log("============================")
+
+
+//task57
+// Write a function that takes an object as argument
+// Somehow, the properties and keys of the object got mixed up
+// Swap the Javascript object's key with its values and return the resulting object
+function swapProperties(obj: { [key: string]: any }): { [key: string]: any } {
+    return Object.keys(obj).reduce((result, key) => {
+        result[obj[key]] = key;
+        return result;
+    }, {} as { [key: string]: any });
+}
+
+// for (const key in obj) {
+//     if (obj.hasOwnProperty(key)) {
+//         const value = obj[key];
+//         swappedObject[value] = key;
+//     }
+// }
+
+
+console.log(swapProperties({z:'a',y:'b',x:'c',w:'d'}));
+console.log(swapProperties({2:'a',4:'b',6:'c',8:'d'}));
+console.log(swapProperties({a:1,z:24}));
+console.log("============================")
+
+
+
+//task58
+// Write a function that takes an object as argument
+// Some of the property values contain empty strings
+// Replace empty strings and strings that contain only whitespace with null values
+// Return the resulting object
+function swapToNullValues(obj: { [key:string]: any }) : { [key: string]: any } {
+    for (const key in obj) {
+        if(obj.hasOwnProperty(key)) {
+            let value = obj[key];
+            if(value.trim() === "") {
+                obj[key] = null;
+            }
+        }
+    }
+    return obj;
+}
+
+console.log(swapToNullValues({ a: 'a', b: 'b', c: '' }));
+console.log(swapToNullValues({ a: '', b: 'b', c: ' ', d: 'd' }));
+console.log(swapToNullValues({ a: 'a', b: 'b ', c: ' ', d: '' }));
+console.log("============================")
+
+
+//task59
+// Write a function that takes an object as argument containing properties with personal information
+// Extract firstName, lastName, size, and weight if available
+// If size or weight is given transform the value to a string
+// Attach the unit cm to the size
+// Attach the unit kg to the weight
+// Return a new object with all available properties that we are interested in
+function personalInformation(obj: { [key: string]: any }) : { [key: string]: any } {
+    const result: { [key: string]: any } = {};
+
+    if(obj.hasOwnProperty('fn')) {
+        result.fn = obj.fn;
+    }
+
+    if(obj.hasOwnProperty('ln')) {
+        result.ln = obj.ln;
+    }
+
+    if(obj.hasOwnProperty('size')) {
+        result.size = `${obj.size}cm`;
+    }
+
+    if(obj.hasOwnProperty('weight')) {
+        result.size = `${obj.weight}cm`;
+    }
+
+    return result;
+}
+
+console.log(personalInformation({fn: 'Lisa', ln: 'Müller', age: 17, size: 175, weight: 67}));
+console.log(personalInformation({fn: 'Martin', ln: 'Harper', age: 26, email: 'martin.harper@test.de', weight: 102}));
+console.log(personalInformation({fn: 'Andrew', ln: 'Harper', age: 81, size: 175, weight: 71}));
+console.log(personalInformation({fn: 'Matthew', ln: 'Müller', age: 19, email: 'matthew@mueller.de'}));
+console.log("============================");
+
+
+//task60
+// Write a function that takes an array of objects and a string as arguments
+// Add a property with key 'continent' and value equal to the string to each of the objects
+// Return the new array of objects
+// Tip: try not to mutate the original array
+function addContinent(array: { [key: string]: any }[], arg: string) : { [key:string]: any }[] {
+    for(const obj of array) {
+        for(const key in obj) {
+            if(obj.hasOwnProperty(key)) {
+                obj.continent = arg;
+            }
+        }
+    }
+    return array;
+ }
+ 
+
+console.log(addContinent([{ city: 'Tokyo', country: 'Japan' }, { city: 'Bangkok', country: 'Thailand' }], 'Asia'));
+console.log(addContinent([{ city: 'Stockholm', country: 'Sweden' }, { city: 'Paris', country: 'France' }], 'Europe'));
 console.log("============================");
 
